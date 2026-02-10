@@ -348,7 +348,7 @@ Each KMS key includes the following components:
 
 ---
 
-## 🧪 **Spring Boot KMS Integration Example**
+## **Spring Boot KMS Integration Example**
 
 ### Maven Dependencies
 ```xml

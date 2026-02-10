@@ -1,0 +1,232 @@
+# AWS Networking
+
+## VPC (Virtual Private Cloud)
+
+**What is VPC?**
+
+VPC is a logically isolated section of AWS cloud where you define your own networking setup.
+
+**VPC Features**
+
+- Complete control over IP ranges, subnets, routing, NAT, and security groups
+- Provides better security, control, and network segmentation
+- Isolated network inside AWS
+- Each region has a default VPC auto-created
+
+**Custom VPC vs Default VPC**
+
+- Default VPC: Auto-created in each region, ready to use immediately
+- Custom VPC: Full control over configuration, recommended for production workloads
+
+---
+
+## Subnets
+
+**What is a Subnet?**
+
+A subnet is a subdivision of a VPC's IP range used to separate resources logically.
+
+**Subnet Types**
+
+| Type | Description | Use Case |
+|------|-------------|----------|
+| Public Subnet | Direct internet access via Internet Gateway | Web servers, load balancers, bastion hosts |
+| Private Subnet | No direct internet access | Databases, application servers, internal services |
+
+**Purpose of Subnets**
+
+- Isolation and security by separating tiers (web, app, database)
+- Apply different security rules to different layers
+- Separate public-facing resources from internal services
+
+---
+
+## VPC Networking Components
+
+**Internet Gateway**
+
+- Enables internet access for public subnets
+- Allows resources in public subnet to communicate with internet
+- Horizontally scaled, redundant, highly available
+
+**NAT Gateway**
+
+- Enables private subnet to access internet for outbound traffic only
+- Used for software updates, downloads, API calls
+- Does not allow inbound traffic from internet
+
+**Route Tables**
+
+- Define traffic routing rules
+- Each subnet must be associated with a route table
+- Controls where network traffic is directed
+
+**Security Groups**
+
+- Instance-level firewall (stateful)
+- Controls inbound and outbound traffic at instance level
+- Allow rules only (no deny rules)
+- Evaluates all rules before deciding to allow traffic
+
+**Network ACLs (NACLs)**
+
+- Subnet-level firewall (stateless)
+- Controls traffic at subnet boundary
+- Supports both allow and deny rules
+- Processes rules in order by rule number
+
+---
+
+## Security Groups vs NACLs
+
+| Feature | Security Groups | NACLs |
+|---------|----------------|--------|
+| Level | Instance level | Subnet level |
+| State | Stateful (return traffic allowed automatically) | Stateless (return traffic must be explicitly allowed) |
+| Rules | Allow rules only | Allow and deny rules |
+| Rule Processing | All rules evaluated | Rules processed in order |
+| Application | Applied to instances | Applied to subnets |
+| Default | Denies all inbound, allows all outbound | Allows all inbound and outbound |
+
+---
+
+## VPC Connectivity
+
+**VPC Peering**
+
+- Direct network connection between two VPCs
+- Traffic stays on AWS private network
+- Non-transitive (VPC A to VPC B, VPC B to VPC C does not mean A to C)
+- Can peer across regions and accounts
+
+**Transit Gateway**
+
+- Hub that connects multiple VPCs and on-premises networks
+- Simplifies network topology
+- Transitive routing supported
+- Better for complex multi-VPC architectures
+
+**VPN (Virtual Private Network)**
+
+- Securely connects on-premises network to AWS via internet
+- Encrypted connection over public internet
+- Used for hybrid cloud setups
+
+**AWS Direct Connect**
+
+- Dedicated private connection from on-premises to AWS
+- Does not use public internet
+- More reliable, consistent network performance
+- Lower latency than VPN
+
+**Direct Connect vs VPN**
+
+| Feature | Direct Connect | VPN |
+|---------|---------------|-----|
+| Connection Type | Dedicated private line | Encrypted over internet |
+| Setup Time | Weeks to months | Minutes to hours |
+| Cost | Higher (dedicated circuit) | Lower (pay for data transfer) |
+| Latency | Lower and consistent | Variable |
+| Bandwidth | Up to 100 Gbps | Up to 1.25 Gbps per tunnel |
+| Use Case | High throughput, consistent performance | Quick setup, lower cost, backup connection |
+
+---
+
+## VPC Communication Patterns
+
+**Within VPC**
+
+- Components communicate via private IPs
+- Fast, low-latency communication
+- No data transfer costs
+
+**Across VPCs**
+
+- Use VPC Peering for direct connection
+- Use Transit Gateway for hub-and-spoke model
+- Use VPN or Direct Connect for on-premises integration
+
+---
+
+## Load Balancing
+
+**What is Elastic Load Balancing (ELB)?**
+
+ELB distributes incoming traffic across multiple targets such as EC2 instances, containers, and Lambda functions.
+
+**Load Balancer Types**
+
+| Type | Layer | Protocol | Use Case | Key Features |
+|------|-------|----------|----------|--------------|
+| Application Load Balancer (ALB) | Layer 7 | HTTP/HTTPS | Web apps, microservices, REST APIs | Path-based routing, host-based routing, WebSockets, HTTP/2 |
+| Network Load Balancer (NLB) | Layer 4 | TCP/UDP | High performance TCP/UDP traffic | Millions of requests per second, ultra-low latency, static IP |
+| Classic Load Balancer (CLB) | Layer 4 & 7 | HTTP/HTTPS/TCP | Legacy applications | Older generation, limited features |
+| Gateway Load Balancer (GWLB) | Layer 3 | IP | Third-party virtual appliances | Firewalls, intrusion detection, transparent scaling |
+
+**When to Use Each Load Balancer**
+
+- ALB: Modern web applications, microservices, container-based apps
+- NLB: Gaming, IoT, real-time applications requiring ultra-low latency
+- CLB: Legacy applications already using Classic Load Balancer
+- GWLB: Deploy third-party security and network appliances
+
+---
+
+## Amazon Route 53
+
+**What is Route 53?**
+
+Route 53 is a highly available DNS service that provides domain registration, DNS routing, and health checks.
+
+**Routing Policies**
+
+| Policy | Description | Use Case |
+|--------|-------------|----------|
+| Simple | Single resource routing | Basic DNS resolution |
+| Weighted | Route based on assigned weights | A/B testing, gradual migration |
+| Latency | Route to lowest latency endpoint | Global applications |
+| Failover | Primary and secondary resources | Disaster recovery |
+| Geolocation | Route based on user location | Compliance, localized content |
+| Geoproximity | Route based on resource and user location | Traffic distribution by geography |
+| Multi-value | Return multiple IP addresses | Simple load distribution with health checks |
+
+**Common Uses**
+
+- Map domain names to AWS resources like EC2, ALB, and CloudFront
+- Route traffic based on latency, geo-location, or failover policies
+- Manage hybrid setups with on-premises and AWS resources
+- Health checks and automatic failover
+
+**Important Notes**
+
+- Route 53 is a global service, not tied to a single Availability Zone
+- One Route 53 configuration can route across multiple AZs and regions
+- Integrated with AWS global infrastructure
+
+**Failover Strategy**
+
+If one region or resource fails, Route 53 automatically routes traffic to healthy resources based on health checks.
+
+---
+
+## Networking Best Practices
+
+**Security**
+
+- Use least privilege IAM roles instead of long-lived access keys
+- Rotate secrets via Secrets Manager
+- Use TLS everywhere for data in transit
+- Enable CloudTrail for audit logs
+- Use GuardDuty and Inspector for threat detection
+- Deploy WAF and Shield to protect from DDoS, SQL injection, XSS
+- Patch OS and middleware if using EC2
+- Encrypt data at rest using KMS or SSE-S3 and in transit using TLS
+
+**Network Design**
+
+- Separate public and private subnets by tier
+- Use multiple Availability Zones for high availability
+- Implement defense in depth with Security Groups and NACLs
+- Use NAT Gateway for private subnet internet access
+- Consider Direct Connect for consistent on-premises connectivity
+- Use Transit Gateway for complex multi-VPC architectures

@@ -1,0 +1,479 @@
+# AWS Compute Services Guide
+
+A comprehensive guide to AWS compute options, from virtual machines to serverless computing.
+
+---
+
+## Overview
+
+AWS Compute Services provide cloud-based processing power, execution environments, and scaling capabilities for applications. This guide covers the main compute services, their use cases, and best practices.
+
+---
+
+## Compute Service Options
+
+### Comparison Table
+
+| Service | Type | Best For | Management Level |
+| --- | --- | --- | --- |
+| EC2 | Virtual Machine | Full control, legacy apps, custom environments | High (manage OS, runtime, scaling) |
+| Lambda | Serverless | Event-driven tasks, microservices, APIs | Low (no server management) |
+| Elastic Beanstalk | Platform-as-a-Service | Web apps, quick deployment | Medium (handles infrastructure) |
+| ECS | Container Orchestration | Docker apps, microservices | Medium (manage containers) |
+| EKS | Managed Kubernetes | Kubernetes users, multi-cloud portability | Medium-High (manage K8s workloads) |
+| Fargate | Serverless Containers | Containers without server management | Low (serverless container runtime) |
+| App Runner | Managed App Service | Deploy from Git or containers quickly | Low (fully managed) |
+| Lightsail | Simplified VPS | Small web apps, beginners, testing | Medium (simplified interface) |
+| AWS Batch | Batch Computing | Large-scale parallel jobs, analytics, ML | Low (auto-provisioning) |
+| Outposts | Hybrid/Edge | On-premises AWS, low-latency needs | High (hybrid infrastructure) |
+
+---
+
+## EC2 (Elastic Compute Cloud)
+
+### What is EC2?
+
+EC2 provides virtual servers (instances) in the cloud with full control over the operating system, runtime, and application stack.
+
+### Key Features
+
+- Choose instance type, size, and operating system
+- SSH access to servers
+- Auto Scaling and Elastic Load Balancing
+- Multiple storage options
+- Network configuration control
+
+### Instance Types
+
+| Category | Use Case | Examples |
+| --- | --- | --- |
+| General Purpose | Balanced compute and memory | t2, t3, m5 |
+| Compute Optimized | High CPU workloads | c5, c6 |
+| Memory Optimized | In-memory databases, caching | r5, x1 |
+| Storage Optimized | Big data, analytics, logs | i3, d2 |
+| Accelerated Computing | GPU and ML workloads | p3, g4 |
+
+### Pricing Models
+
+| Type | Description | When to Use | Benefit |
+| --- | --- | --- | --- |
+| On-Demand | Pay per hour/second, no commitment | Short-term, unpredictable workloads | Flexible, no upfront cost |
+| Reserved | Commit for 1-3 years | Steady, long-term workloads | Up to 70% cheaper |
+| Spot | Use spare capacity at discount | Batch jobs, flexible workloads | Cheapest option (can be interrupted) |
+
+### When to Use EC2
+
+- Full control over infrastructure needed
+- Legacy applications requiring specific configurations
+- Custom networking or security requirements
+- Long-running applications
+
+---
+
+## Lambda
+
+### What is Lambda?
+
+Lambda is a serverless compute service that runs code in response to events without managing servers.
+
+### Key Characteristics
+
+- Pay only for compute time used
+- Automatic scaling
+- Supports multiple languages (Python, Node.js, Java, Go, .NET, Ruby)
+- Maximum execution time: 15 minutes
+- Memory range: 128 MB to 10 GB
+
+### Common Use Cases
+
+- Real-time file processing (S3 uploads)
+- Data transformation and ETL
+- API backends with API Gateway
+- Automated responses to CloudWatch alarms
+- Event-driven architectures
+- Scheduled tasks (cron jobs)
+
+### Best Practices
+
+- Keep functions small and focused
+- Use environment variables for configuration
+- Implement idempotency for reliability
+- Monitor with CloudWatch Logs and X-Ray
+- Use provisioned concurrency for predictable latency
+
+### Cautions and Limitations
+
+- Cold starts cause delay on first invocation
+- Maximum execution timeout of 15 minutes
+- Memory and CPU limits (max 10 GB memory)
+- Vendor lock-in (AWS-only service)
+- Not suitable for long-running processes
+
+### When to Use Lambda
+
+- Event-driven applications
+- Microservices and APIs
+- Background job processing
+- Cost-sensitive workloads with variable usage
+- Applications with unpredictable traffic patterns
+
+---
+
+## Elastic Beanstalk
+
+### What is Elastic Beanstalk?
+
+A fully managed Platform-as-a-Service (PaaS) for deploying and scaling applications without managing infrastructure.
+
+### Key Features
+
+- Supports multiple languages: .NET, Java, Node.js, Python, PHP, Ruby, Go, Docker
+- Built-in auto scaling
+- Fully managed infrastructure (patching, OS updates, monitoring)
+- High availability with auto failover and backups
+- Security and compliance with IAM integration
+- Handles provisioning, load balancing, and monitoring
+
+### Advantages
+
+1. Quick deployment - just upload code
+2. No infrastructure management required
+3. Automatic scaling based on demand
+4. Built-in monitoring and health checks
+5. Easy rollback and version management
+
+### When to Use Elastic Beanstalk
+
+- Web applications and APIs
+- Developers who want to focus on code, not infrastructure
+- Simple deployment requirements
+- Standard application architectures
+
+---
+
+## Container Services
+
+### ECS (Elastic Container Service)
+
+#### Overview
+
+Fully managed container orchestration service for running Docker containers on AWS-managed infrastructure.
+
+#### Key Features
+
+- Deep integration with AWS services
+- Launch types: EC2 (manage instances) or Fargate (serverless)
+- Simple to set up and manage
+- AWS-focused ecosystem
+
+#### When to Use ECS
+
+- Docker containerized applications
+- AWS-native workloads
+- Microservices architecture
+- Teams familiar with AWS ecosystem
+
+### EKS (Elastic Kubernetes Service)
+
+#### Overview
+
+Managed Kubernetes service that runs upstream Kubernetes for container orchestration.
+
+#### Key Features
+
+- Runs standard Kubernetes
+- Portable across cloud providers
+- Large ecosystem and tooling
+- Supports hybrid deployments
+- More complex but more flexible
+
+#### When to Use EKS
+
+- Organizations already using Kubernetes
+- Multi-cloud or hybrid cloud strategies
+- Need for Kubernetes ecosystem tools
+- Teams with Kubernetes expertise
+
+### ECS vs EKS Comparison
+
+| Factor | ECS | EKS |
+| --- | --- | --- |
+| Simplicity | Easier to learn and operate | More complex |
+| AWS Integration | Deep integration | Standard Kubernetes |
+| Portability | AWS-specific | Multi-cloud portable |
+| Ecosystem | AWS-focused | Large Kubernetes ecosystem |
+| Best For | AWS-native workloads | Multi-cloud or K8s expertise |
+
+---
+
+## Fargate
+
+### What is Fargate?
+
+Serverless compute engine for containers that works with both ECS and EKS.
+
+### Key Features
+
+- No need to manage EC2 instances
+- Per-second billing
+- Automatic scaling
+- Focus on application, not infrastructure
+
+### When to Use Fargate
+
+- Running containers without managing servers
+- Microservices deployment
+- Variable or unpredictable workloads
+- Teams wanting serverless container experience
+
+---
+
+## App Runner
+
+### What is App Runner?
+
+Fully managed service for quickly deploying containerized web apps and APIs.
+
+### Key Features
+
+- Accepts container images or source code
+- Handles auto scaling automatically
+- Built-in HTTPS support
+- Automatic monitoring and health checks
+- Simple deployment process
+
+### When to Use App Runner
+
+- Quick deployment needs
+- Web applications and APIs
+- Developers wanting minimal configuration
+- Small to medium-scale applications
+
+---
+
+## Lightsail
+
+### What is Lightsail?
+
+Simplified Virtual Private Server (VPS) offering with bundled pricing and easy management.
+
+### Key Features
+
+- Bundled pricing (compute, storage, networking)
+- Simplified networking and instance setup
+- Pre-configured application stacks
+- Easy-to-use interface
+
+### When to Use Lightsail
+
+- Small web applications
+- Personal websites and blogs
+- Testing and development environments
+- Beginners moving from traditional hosting
+- Predictable, low-traffic workloads
+
+---
+
+## AWS Batch
+
+### What is AWS Batch?
+
+Service for running large-scale parallel and batch computing jobs.
+
+### Key Features
+
+- Automatically provisions compute based on job requirements
+- Scales resources dynamically
+- Manages job queues and scheduling
+- Integrates with EC2, Spot instances, and Fargate
+
+### When to Use AWS Batch
+
+- Data processing and analytics
+- Machine learning training jobs
+- Scientific computing
+- Financial modeling
+- Rendering and transcoding
+
+---
+
+## Outposts and Local Zones
+
+### AWS Outposts
+
+Brings AWS infrastructure and services to on-premises locations.
+
+#### Use Cases
+
+- Data residency requirements
+- Low-latency local processing
+- Hybrid cloud architectures
+- Migration to cloud
+
+### Local Zones
+
+AWS infrastructure deployments in metropolitan areas for ultra-low latency.
+
+#### Use Cases
+
+- Real-time gaming
+- Live video streaming
+- Augmented/Virtual Reality
+- Applications requiring single-digit millisecond latency
+
+---
+
+## Scaling Strategies
+
+### Horizontal vs Vertical Scaling
+
+| Aspect | Horizontal Scaling | Vertical Scaling |
+| --- | --- | --- |
+| Definition | Add more EC2 instances (scale out/in) | Increase CPU/RAM of one instance (scale up/down) |
+| Best For | Stateless apps, microservices, web apps | Stateful apps, monoliths, databases |
+| Cost | Cost-effective with Auto Scaling Groups | More expensive, no auto scaling |
+| Availability | Higher (distributed across instances) | Lower (single point of failure) |
+| Example | Adding 5 EC2s behind load balancer | Upgrading t2.micro to m5.large |
+
+### Auto Scaling Groups
+
+#### What are Auto Scaling Groups?
+
+A collection of EC2 instances that automatically scale in or out based on traffic, custom rules, or schedules.
+
+#### Key Features
+
+- Maintains desired number of instances
+- Automatic replacement of unhealthy instances
+- Integrates with Elastic Load Balancing
+- Scales based on CloudWatch metrics
+- Supports multiple scaling policies
+
+#### EC2 Auto Scaling
+
+Adjusts instance count dynamically to maintain performance and reduce costs.
+
+#### Benefits
+
+- Cost optimization (scale down during low usage)
+- High availability (replace failed instances)
+- Better performance (scale up during high demand)
+- Automated management
+
+---
+
+## Serverless Computing
+
+### What is Serverless?
+
+Serverless means you do not manage servers, but AWS runs them under the hood. AWS provisions, scales, and maintains infrastructure automatically.
+
+### Key Serverless Services
+
+| Service | Purpose |
+| --- | --- |
+| Lambda | Compute/code execution |
+| DynamoDB | NoSQL database |
+| S3 | Object storage |
+| API Gateway | API management |
+| EventBridge | Event bus |
+| Step Functions | Workflow orchestration |
+
+### Is It Truly Serverless?
+
+No, servers still exist - you just do not manage them. AWS handles all server provisioning, scaling, patching, and maintenance behind the scenes.
+
+### Advantages
+
+- No server management
+- Automatic scaling
+- Pay only for usage
+- Built-in high availability
+- Faster time to market
+
+### Considerations
+
+- Vendor lock-in
+- Cold start latency
+- Execution time limits
+- Debugging complexity
+- Less control over infrastructure
+
+---
+
+## Choosing the Right Compute Service
+
+### Decision Framework
+
+**Start with these questions:**
+
+1. Do you need full control over the infrastructure?
+   - Yes: EC2
+   - No: Continue
+
+2. Are you deploying containers?
+   - Yes: ECS, EKS, or Fargate
+   - No: Continue
+
+3. Is your workload event-driven or has variable traffic?
+   - Yes: Lambda
+   - No: Continue
+
+4. Do you want minimal infrastructure management?
+   - Yes: Elastic Beanstalk or App Runner
+   - No: EC2
+
+### Common Scenarios
+
+| Scenario | Recommended Service |
+| --- | --- |
+| Legacy application with specific OS requirements | EC2 |
+| Microservices architecture | ECS, EKS, or Lambda |
+| Simple web application deployment | Elastic Beanstalk or App Runner |
+| Image processing on upload | Lambda |
+| Real-time data processing | Lambda with Kinesis |
+| Long-running batch jobs | AWS Batch or EC2 |
+| Kubernetes-based deployment | EKS |
+| Simple WordPress site | Lightsail |
+| High-performance computing | EC2 with placement groups |
+| API backend | Lambda with API Gateway |
+
+---
+
+## Best Practices
+
+### General Recommendations
+
+- Use Auto Scaling to handle variable workloads
+- Implement health checks and monitoring
+- Design for failure and use multiple Availability Zones
+- Use appropriate instance types for workload
+- Leverage managed services when possible
+- Implement security best practices (IAM roles, security groups)
+- Monitor costs and optimize regularly
+
+### Cost Optimization
+
+- Use Reserved Instances for steady workloads
+- Use Spot Instances for fault-tolerant workloads
+- Implement auto scaling to match demand
+- Right-size instances based on actual usage
+- Turn off unused resources
+- Use Savings Plans for flexible commitments
+
+### Security
+
+- Use IAM roles instead of access keys
+- Implement least privilege access
+- Enable encryption at rest and in transit
+- Use VPC for network isolation
+- Keep systems patched and updated
+- Enable logging and monitoring
+
+---
+
+## Summary
+
+AWS offers a comprehensive range of compute services to match different application requirements, from full control with EC2 to fully managed serverless with Lambda. Understanding the trade-offs between control, management overhead, cost, and scalability helps you choose the right service for your workload.
+
+The key is to match your application architecture, team expertise, and business requirements with the appropriate compute service rather than forcing a one-size-fits-all approach.

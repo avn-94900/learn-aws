@@ -1,256 +1,3 @@
-# AWS S3 Core Concepts
-
-Amazon Simple Storage Service (S3) is a highly scalable, durable, and secure object storage service that allows you to store and retrieve any amount of data from anywhere on the web. Understanding the following core concepts is essential for working with S3 effectively.
-
-- **Fully managed service** (no infrastructure management required)
-- **Object-based storage model** (store files as objects in buckets)
-- **Global accessibility** with regional data residency
-- **99.999999999% (11 9's) durability** for data protection
-
-## 1. S3 Bucket
-
-An S3 bucket is a container that holds objects (files) in Amazon S3.
-
-- **Definition**: A top-level container for storing objects in S3
-- **Purpose**: Organizes and manages access to your data
-- **Naming**: Globally unique names across all AWS accounts and regions
-- **Capacity**: Virtually unlimited storage capacity
-- **Regional**: Created in a specific AWS region but accessible globally
-
-## 2. S3 Object
-
-Objects are the fundamental entities stored in Amazon S3, consisting of data and metadata.
-
-- **Definition**: Individual files or data items stored in S3 buckets
-- **Components**: Object data, metadata, and unique key (name)
-- **Size Limit**: Single object can be up to 5 TB
-- **Key**: Unique identifier within a bucket (acts as filename)
-- **Versioning**: Multiple versions of the same object can be stored
-
-## 3. Object Key
-
-The object key is the unique identifier for an object within a bucket.
-
-- **Definition**: The name that you assign to an object
-- **Format**: UTF-8 encoded string up to 1,024 bytes long
-- **Path Structure**: Can include prefixes and delimiters (like folders)
-- **Example**: `documents/2024/invoice-12345.pdf`
-- **Uniqueness**: Must be unique within the bucket
-
-## 4. Storage Classes
-
-S3 offers multiple storage classes optimized for different use cases and cost requirements.
-
-- **S3 Standard**: General-purpose storage with high durability and availability
-- **S3 Intelligent-Tiering**: Automatically moves data between access tiers
-- **S3 Standard-IA**: Infrequent access with lower cost but retrieval charges
-- **S3 One Zone-IA**: Lower cost for infrequently accessed, non-critical data
-- **S3 Glacier**: Long-term archival with retrieval times from minutes to hours
-- **S3 Glacier Deep Archive**: Lowest cost for long-term retention (12+ hours retrieval)
-
-## 5. Bucket Policies
-
-Bucket policies are JSON-based access control policies that define permissions for S3 resources.
-
-- **Definition**: Resource-based policies attached to S3 buckets
-- **Format**: JSON documents using AWS Policy Language
-- **Scope**: Apply to the bucket and all objects within it
-- **Elements**: Principal, Action, Resource, Condition, Effect
-- **Size Limit**: Maximum 20 KB per policy
-
-## 6. Access Control Lists (ACLs)
-
-ACLs provide a legacy method for controlling access to buckets and objects.
-
-- **Definition**: XML-based access control mechanism
-- **Granularity**: Can be applied to individual objects or entire buckets
-- **Permissions**: READ, WRITE, READ_ACP, WRITE_ACP, FULL_CONTROL
-- **Grantees**: AWS accounts, predefined groups, or email addresses
-- **Recommendation**: Use bucket policies or IAM policies instead for new implementations
-
-## 7. Versioning
-
-S3 versioning allows you to keep multiple variants of an object in the same bucket.
-
-- **Definition**: Feature that maintains multiple versions of objects
-- **States**: Unversioned (default), Enabled, or Suspended
-- **Version ID**: Unique identifier assigned to each object version
-- **Current Version**: The latest version retrieved by default
-- **Protection**: Prevents accidental deletion or modification
-
-## 8. Lifecycle Management
-
-Lifecycle rules automate the transition and expiration of objects based on defined criteria.
-
-- **Definition**: Rules that automatically manage objects over their lifetime
-- **Transitions**: Move objects between storage classes
-- **Expiration**: Automatically delete objects after specified time
-- **Scope**: Apply to entire bucket, prefixes, or tags
-- **Cost Optimization**: Reduces storage costs by moving to cheaper classes
-
----
-
-## S3 Object Anatomy
-Each S3 object includes the following components:
-
-* **Object Data** – The actual file content (up to 5 TB)
-* **Object Key** – Unique identifier/name within the bucket
-* **Version ID** – Unique identifier for object versions (if versioning enabled)
-* **Metadata** – System and user-defined key-value pairs
-* **ETag** – Entity tag for object integrity verification
-* **Storage Class** – Current storage class of the object
-* **Timestamps** – Last modified date and creation time
-
----
-
-## Object Lifecycle States
-S3 objects progress through different states during their lifecycle:
-
-* **Created** – Object is successfully uploaded to S3
-* **Accessible** – Object is available for read/write operations
-* **Transitioned** – Object moved to different storage class via lifecycle rule
-* **Archived** – Object stored in Glacier or Deep Archive
-* **Expired** – Object marked for deletion by lifecycle rule
-* **Deleted** – Object permanently removed from S3
-
----
-
-## Data Consistency Model
-
-### Strong Consistency
-* **Read-after-Write**: Immediately consistent for new objects
-* **List Consistency**: Bucket listings reflect recent changes
-* **Update Consistency**: Overwrite and delete operations are strongly consistent
-* **Global**: Consistent across all AWS regions and edge locations
-
-### Previous Model (Historical)
-* **Eventual Consistency**: Used for overwrites and deletes (legacy behavior)
-* **Read-after-Write**: Immediate consistency for new objects only
-* **Timeline**: S3 achieved strong consistency in December 2020
-
----
-
-## Multipart Upload
-
-### Purpose and Benefits
-* **Large Files**: Required for objects larger than 5 GB
-* **Performance**: Parallel uploads improve speed
-* **Resilience**: Resume failed uploads from last completed part
-* **Threshold**: Recommended for objects larger than 100 MB
-
-### Process Flow
-* **Initiate**: Start multipart upload and receive Upload ID
-* **Upload Parts**: Upload parts (5 MB to 5 GB each) with part numbers
-* **Complete**: Combine all parts into single object
-* **Abort**: Cancel incomplete uploads to avoid charges
-
----
-
-## Cross-Origin Resource Sharing (CORS)
-
-### Configuration
-* **Purpose**: Allow web applications to access S3 resources from different domains
-* **Rules**: Define allowed origins, methods, headers, and credentials
-* **XML Format**: Configuration stored as XML document on bucket
-* **Preflight**: Handles browser preflight requests for complex operations
-
-### Example CORS Configuration
-```xml
-<CORSConfiguration>
-  <CORSRule>
-    <AllowedOrigin>https://example.com</AllowedOrigin>
-    <AllowedMethod>GET</AllowedMethod>
-    <AllowedMethod>PUT</AllowedMethod>
-    <AllowedHeader>*</AllowedHeader>
-  </CORSRule>
-</CORSConfiguration>
-```
-
----
-
-## Data Transfer Methods
-
-### Upload Methods
-* **Single Put**: Direct upload for objects up to 5 GB
-* **Multipart Upload**: For large objects or improved performance
-* **Transfer Acceleration**: Uses CloudFront edge locations for faster uploads
-* **AWS CLI/SDK**: Programmatic uploads with retry logic
-* **Pre-signed URLs**: Temporary URLs for secure uploads without AWS credentials
-
-### Download Methods
-* **Direct Download**: Standard GET requests for object retrieval
-* **Range Requests**: Download specific byte ranges of objects
-* **Transfer Acceleration**: Accelerated downloads via CloudFront
-* **Pre-signed URLs**: Temporary URLs for secure downloads
-* **CloudFront Distribution**: Content delivery network for global distribution
-
----
-
-## Security and Encryption
-
-### Encryption at Rest
-* **SSE-S3**: Server-side encryption with S3-managed keys
-* **SSE-KMS**: Server-side encryption with AWS KMS keys
-* **SSE-C**: Server-side encryption with customer-provided keys
-* **Client-Side**: Encrypt data before uploading to S3
-
-### Encryption in Transit
-* **HTTPS/TLS**: All API calls encrypted using SSL/TLS
-* **VPC Endpoints**: Private connectivity without internet transit
-* **AWS PrivateLink**: Secure connection to S3 through AWS backbone
-
-### Access Control
-* **IAM Policies**: Identity-based permissions for users and roles
-* **Bucket Policies**: Resource-based permissions for buckets
-* **ACLs**: Object and bucket-level access control (legacy)
-* **Pre-signed URLs**: Time-limited access without AWS credentials
-* **S3 Access Points**: Simplified access management for shared datasets
-
----
-
-## Monitoring and Logging
-
-### CloudTrail Integration
-* **API Logging**: Records all S3 API calls for auditing
-* **Data Events**: Tracks object-level operations (optional)
-* **Management Events**: Logs bucket-level operations
-* **Cross-Account**: Supports logging across AWS accounts
-
-### Access Logging
-* **Server Access Logs**: Detailed records of requests made to bucket
-* **Log Format**: Standard fields including requester, operation, response
-* **Delivery**: Logs delivered to specified S3 bucket
-* **Analysis**: Use with analytics tools for insights
-
-### CloudWatch Metrics
-* **Storage Metrics**: Bucket size and object count
-* **Request Metrics**: Request rates and error rates
-* **Replication Metrics**: Cross-region replication status
-* **Custom Metrics**: Application-specific metrics via CloudWatch API
-
----
-
-## Best Practices and Patterns
-
-### Naming Conventions
-* **Bucket Names**: Use DNS-compliant names with lowercase letters
-* **Object Keys**: Avoid sequential prefixes for better performance
-* **Hierarchical Structure**: Use prefixes to organize objects logically
-* **Reserved Characters**: Avoid special characters that may cause issues
-
-### Performance Optimization
-* **Request Rate**: Distribute load across different prefixes
-* **Multipart Upload**: Use for large files and parallel processing
-* **Transfer Acceleration**: Enable for global data transfer
-* **CloudFront**: Use CDN for frequently accessed content
-
-### Cost Optimization
-* **Storage Classes**: Use appropriate class for access patterns
-* **Lifecycle Rules**: Automatically transition or delete objects
-* **Intelligent Tiering**: Let S3 optimize storage class automatically
-* **Monitoring**: Track storage costs and usage patterns
-
-<br/><br/>
 
 ---
 Here's a clear breakdown with **realistic examples** showing what **S3 operations look like** — both **programmatically** and via **AWS SDK** (Java/Spring Boot).
@@ -570,3 +317,94 @@ spring:
 ```
 
 ---
+
+## 🛠 How to Generate a Pre-Signed URL in Spring Boot (Using AWS SDK v2 or v1)
+
+### ✅ Option 1: AWS SDK for Java **v2** (Recommended)
+
+```java
+import software.amazon.awssdk.auth.credentials.AwsBasicCredentials;
+import software.amazon.awssdk.auth.credentials.StaticCredentialsProvider;
+import software.amazon.awssdk.regions.Region;
+import software.amazon.awssdk.services.s3.S3Client;
+import software.amazon.awssdk.services.s3.presigner.S3Presigner;
+import software.amazon.awssdk.services.s3.model.GetObjectRequest;
+import software.amazon.awssdk.services.s3.presigner.model.GetObjectPresignRequest;
+
+import java.net.URL;
+import java.time.Duration;
+
+public class S3PreSignedUrlGenerator {
+
+    public URL generatePreSignedUrl(String bucketName, String objectKey) {
+        S3Presigner presigner = S3Presigner.builder()
+            .region(Region.AP_SOUTH_1)  // use your region
+            .credentialsProvider(StaticCredentialsProvider.create(
+                AwsBasicCredentials.create("ACCESS_KEY", "SECRET_KEY")))
+            .build();
+
+        GetObjectRequest getObjectRequest = GetObjectRequest.builder()
+            .bucket(bucketName)
+            .key(objectKey)
+            .build();
+
+        GetObjectPresignRequest presignRequest = GetObjectPresignRequest.builder()
+            .signatureDuration(Duration.ofMinutes(10))
+            .getObjectRequest(getObjectRequest)
+            .build();
+
+        return presigner.presignGetObject(presignRequest).url();
+    }
+}
+```
+
+---
+
+### ✅ Option 2: AWS SDK for Java **v1**
+
+```java
+import com.amazonaws.HttpMethod;
+import com.amazonaws.auth.AWSStaticCredentialsProvider;
+import com.amazonaws.auth.BasicAWSCredentials;
+import com.amazonaws.services.s3.AmazonS3;
+import com.amazonaws.services.s3.AmazonS3ClientBuilder;
+import java.net.URL;
+import java.util.Date;
+
+public class S3PreSignedUrlGeneratorV1 {
+
+    public URL generatePresignedUrl(String bucketName, String objectKey) {
+        BasicAWSCredentials credentials = new BasicAWSCredentials("ACCESS_KEY", "SECRET_KEY");
+
+        AmazonS3 s3Client = AmazonS3ClientBuilder.standard()
+            .withRegion("ap-south-1")
+            .withCredentials(new AWSStaticCredentialsProvider(credentials))
+            .build();
+
+        // Set expiration (10 minutes from now)
+        Date expiration = new Date(System.currentTimeMillis() + 1000 * 60 * 10);
+
+        return s3Client.generatePresignedUrl(bucketName, objectKey, expiration, HttpMethod.GET);
+    }
+}
+```
+
+---
+
+### 🧪 Sample Output
+
+```
+https://your-bucket.s3.ap-south-1.amazonaws.com/file.txt?X-Amz-Algorithm=...
+```
+
+---
+
+### 🧾 Tips
+
+* Do **not expose** AWS credentials to frontend code.
+* Set minimum necessary permissions in the IAM policy.
+* Use `HttpMethod.PUT` for uploads and `HttpMethod.GET` for downloads.
+
+---
+
+Would you like an example with **upload (PUT)** or want to **return the URL via a REST controller**?
