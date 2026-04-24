@@ -58,7 +58,7 @@ EC2 provides virtual servers (instances) in the cloud with full control over the
 | Type | Description | When to Use | Benefit |
 | --- | --- | --- | --- |
 | On-Demand | Pay per hour/second, no commitment | Short-term, unpredictable workloads | Flexible, no upfront cost |
-| Reserved | Commit for 1-3 years | Steady, long-term workloads | Up to 70% cheaper |
+| Reserved | Commit for 1-3 years | Steady, long-term workloads | Up to 72% cheaper |
 | Spot | Use spare capacity at discount | Batch jobs, flexible workloads | Cheapest option (can be interrupted) |
 
 ### When to Use EC2

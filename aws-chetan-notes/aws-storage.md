@@ -66,8 +66,8 @@ EBS is **block storage** for EC2 instances — behaves like a virtual hard disk.
 | **Storage Type** | Block |
 | **Attachment** | Single EC2 instance |
 | **Latency** | Sub-millisecond |
-| **IOPS** | Up to 64,000+ (provisioned) |
-| **Throughput** | Up to 4,000 MB/s |
+| **IOPS** | Up to 256,000 (io2 Block Express) / 64,000 (io1/io2) |
+| **Throughput** | Up to 4,000 MB/s (io2 Block Express) / 1,000 MB/s (io1) |
 | **Scope** | Availability Zone |
 
 ### Snapshots

@@ -32,7 +32,7 @@
 - What are the cost benefits associated with each compute option?
 - What is an Auto Scaling Group (ASG)?
 - Difference between auto-scaling and elasticity
-- What is AISG (Application/Auto Scaling Group)?
+- What is ASG (Auto Scaling Group) and how does it work?
 - What are EC2 instance types?
 - When would you choose Spot Instances? Provide use cases
 
@@ -135,7 +135,7 @@
 ## CI/CD and DevOps
 
 - What is CI/CD?
-- What are AWS CI/CD services (CodeCommit, CodeBuild, CodeDeploy, CodePipeline)?
+- What are AWS CI/CD services (CodeBuild, CodeDeploy, CodePipeline, GitHub Actions)?
 - Explain the CI/CD pipeline flow
 - What is Infrastructure as Code (IaC)?
 - Difference between Terraform and CloudFormation

@@ -90,11 +90,11 @@ A fully managed service to store, rotate, and retrieve secrets such as database 
 ```xml
 <dependency>
     <groupId>io.awspring.cloud</groupId>
-    <artifactId>spring-cloud-starter-aws-secrets-manager-config</artifactId>
+    <artifactId>spring-cloud-aws-starter-secrets-manager</artifactId>
 </dependency>
 ```
 
-2. Configure bootstrap.yml
+2. Configure application.yml
 
 ```yaml
 spring:
@@ -104,7 +104,7 @@ spring:
     aws:
       region:
         static: ap-south-1
-      secrets-manager:
+      secretsmanager:
         enabled: true
 ```
 
@@ -132,7 +132,7 @@ spring.datasource.password=${db.password}
 
 **Key Packages**
 
-- io.awspring.cloud.autoconfigure.secretsmanager.AwsSecretsManagerBootstrapConfiguration
+- io.awspring.cloud.autoconfigure.secretsmanager.AwsSecretsManagerAutoConfiguration
 - software.amazon.awssdk.services.secretsmanager.SecretsManagerClient (for direct SDK usage)
 
 ---

@@ -162,7 +162,7 @@ A group of EC2 instances that automatically scale in or out based on demand or c
 | Model | Description | Use Case |
 |-------|-------------|----------|
 | On-Demand | Pay-as-you-go, no commitment | Short-term workloads, testing, development |
-| Reserved | Commit for 1 or 3 years | Steady-state usage, cost savings up to 75% |
+| Reserved | Commit for 1 or 3 years | Steady-state usage, cost savings up to 72% |
 | Spot | Use spare capacity, can be interrupted | Batch jobs, flexible workloads, cost savings up to 90% |
 
 ---
@@ -192,7 +192,7 @@ A Platform-as-a-Service (PaaS) for deploying and scaling applications without ma
 
 **Key Features**
 
-1. Supports multiple languages: .NET, Java, Python, Node.js, PHP, Ruby
+1. Supports multiple languages: .NET, Java, Python, Node.js, PHP, Ruby, Go, Docker
 2. Built-in scalability
 3. Fully managed: patching, security, updates
 4. High availability: auto failover, backup

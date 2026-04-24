@@ -27,14 +27,16 @@ CI/CD (Continuous Integration/Continuous Deployment) automates code integration,
 
 | Service | Purpose | Key Features |
 |---------|---------|--------------|
-| CodeCommit | Source control | Git-based repositories, integrated with AWS |
 | CodeBuild | Build automation | Compile, test, produce artifacts |
 | CodeDeploy | Deployment automation | Blue/green deployments, rolling updates |
 | CodePipeline | Pipeline orchestration | Automated workflow from source to production |
+| GitHub Actions | CI/CD integrated with GitHub | Workflows triggered by events, marketplace actions |
+
+> **Note:** AWS CodeCommit was deprecated in July 2024. New customers should use GitHub, GitLab, or Bitbucket as source control.
 
 **Example AWS CI/CD Pipeline**
 
-1. Developer pushes code to CodeCommit
+1. Developer pushes code to GitHub or GitLab
 2. CodePipeline detects change and triggers CodeBuild
 3. CodeBuild runs tests and creates artifacts
 4. CodeDeploy deploys to EC2, ECS, or Lambda

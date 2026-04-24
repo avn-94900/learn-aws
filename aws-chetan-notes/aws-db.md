@@ -1,3 +1,4 @@
+# AWS Database Services
 
 ## Amazon RDS (Relational Database Service)
 
@@ -45,6 +46,10 @@ Aurora is AWS's high-performance relational database engine compatible with MySQ
 - **High Availability**: Multi-AZ deployment with automatic failover
 - **Backup**: Automatic continuous backup with point-in-time recovery
 
+### Aurora Serverless
+
+Aurora Serverless v2 automatically scales compute capacity based on application demand — ideal for variable or unpredictable workloads.
+
 ### When to Use Aurora
 
 - Need enterprise-grade relational database performance
@@ -52,6 +57,7 @@ Aurora is AWS's high-performance relational database engine compatible with MySQ
 - Want MySQL or PostgreSQL compatibility with better performance
 - Have demanding read-heavy workloads
 - Need to scale without downtime
+- Variable workloads that benefit from Aurora Serverless v2
 
 ---
 

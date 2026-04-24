@@ -65,7 +65,7 @@ SQS (Simple Queue Service) is a fully managed message queuing service that decou
 |---------|---------------|------------|
 | Delivery | At-least-once | Exactly-once |
 | Ordering | Best-effort | Strict ordering |
-| Throughput | Unlimited | 3000 messages/sec (or 300 with batching) |
+| Throughput | Unlimited | 300 msg/sec (3,000 msg/sec with high-throughput mode) |
 | Deduplication | No | Yes (5-minute window) |
 | Use Case | High throughput, order not critical | Strict ordering and deduplication required |
 
