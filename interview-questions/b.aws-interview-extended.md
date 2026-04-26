@@ -69,3 +69,11 @@
 * What is the difference between **application security** and **network security**?
 * How do you design security controls across **multiple layers** in AWS architecture?
 
+
+
+- What is the difference between IAM Role and IAM User?
+- What is STS (Security Token Service)?
+- What is a resource-based policy vs identity-based policy?
+- How do you secure cross-account access?
+- How do you rotate credentials securely?
+
